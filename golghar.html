@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Golghar, Patna | Tourism Information Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{margin:0;font-family:Segoe UI,Arial;background:#f2f6fb;}
+header{background:#0b3c5d;color:#fff;text-align:center;padding:20px;}
+nav{background:#1d70b8;padding:10px;text-align:center;}
+nav a{color:#fff;margin:10px;text-decoration:none;font-weight:600;cursor:pointer;}
+section{background:#fff;margin:15px;padding:20px;border-left:5px solid #1d70b8;}
+h2{color:#0b3c5d;}
+.social-icons a{font-size:26px;margin:10px;color:#1d70b8;}
+.admin-box{background:#eef3f8;padding:15px;border:2px dashed #1d70b8;margin-top:15px;display:none;}
+input,button{padding:8px;margin:5px;width:95%;}
+button{background:#1d70b8;color:#fff;border:none;cursor:pointer;}
+footer{background:#0b3c5d;color:#fff;text-align:center;padding:12px;font-size:13px;}
+.whatsapp{
+  position:fixed;bottom:20px;right:20px;
+  background:#25D366;color:#fff;
+  padding:12px 15px;border-radius:50px;
+  font-size:22px;text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Golghar, Patna</h1>
+<p>Tourism Information Portal | बिहार की ऐतिहासिक धरोहर</p>
+</header>
+
+<nav>
+<a onclick="adminLogin()">Admin Login</a>
+</nav>
+
+<section>
+<h2>Contact & Social Media</h2>
+
+<p>📞 <a id="phoneLink"><span id="phone">Loading...</span></a></p>
+<p>📧 <a id="emailLink"><span id="email">Loading...</span></a></p>
+
+<div class="social-icons">
+<a id="fb" target="_blank"><i class="fab fa-facebook"></i></a>
+<a id="ig" target="_blank"><i class="fab fa-instagram"></i></a>
+<a id="yt" target="_blank"><i class="fab fa-youtube"></i></a>
+<a id="tw" target="_blank"><i class="fab fa-x-twitter"></i></a>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="admin-box">
+<h3>Admin Edit Panel</h3>
+<input id="p" placeholder="Phone number">
+<input id="e" placeholder="Email">
+<input id="f" placeholder="Facebook link">
+<input id="i" placeholder="Instagram link">
+<input id="y" placeholder="YouTube link">
+<input id="t" placeholder="Twitter/X link">
+<input id="w" placeholder="WhatsApp number (without +)">
+<button onclick="saveData()">Save (Update for All)</button>
+</div>
+
+</section>
+
+<footer>
+<p>© 2026 Golghar, Patna – Tourism Information Portal</p>
+<p>
+⚠️ This website is for informational purposes only and is not an official Government of Bihar website.<br>
+⚠️ यह वेबसाइट केवल सूचना हेतु है।
+</p>
+</footer>
+
+<a id="wa" class="whatsapp" target="_blank">
+<i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- 🔥 FIREBASE CDN (WORKS WITH HTML + GITHUB PAGES) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+/* 🔐 FIREBASE CONFIG (YOUR PROJECT) */
+const firebaseConfig = {
+  apiKey: "AIzaSyBvHpXxaDTx4TK4XB3XCN2vujmoCH2Z9DE",
+  authDomain: "golghar-patna.firebaseapp.com",
+  projectId: "golghar-patna",
+  storageBucket: "golghar-patna.firebasestorage.app",
+  messagingSenderId: "537475368416",
+  appId: "1:537475368416:web:3ae9801e825f70227cd785"
+};
+
+/* INITIALIZE FIREBASE */
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* 🔄 LOAD DATA FOR ALL VISITORS (REAL-TIME) */
+db.collection("site").doc("contact").onSnapshot((doc)=>{
+  if(doc.exists){
+    const d = doc.data();
+    phone.innerText = d.phone;
+    phoneLink.href = "tel:" + d.phone;
+
+    email.innerText = d.email;
+    emailLink.href = "mailto:" + d.email;
+
+    fb.href = d.fb;
+    ig.href = d.ig;
+    yt.href = d.yt;
+    tw.href = d.tw;
+
+    wa.href = "https://wa.me/" + d.wa;
+  }
+});
+
+/* 🔐 ADMIN LOGIN */
+function adminLogin(){
+  const u = prompt("Admin Username");
+  const p = prompt("Admin Password");
+  if(u==="admin" && p==="1234"){
+    document.getElementById("adminPanel").style.display="block";
+    alert("Admin Login Successful");
+  }else{
+    alert("Wrong username or password");
+  }
+}
